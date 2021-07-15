@@ -8,8 +8,10 @@ import {
   OrkutNostalgicIconSet
 } from "../lib/AluraCommons";
 
-const followersURL = "https://api.github.com/users/stachovski/followers";
 const githubUser = "stachovski";
+const followersURL = `https://api.github.com/users/${githubUser}/followers`;
+const followingURL = `https://api.github.com/users/${githubUser}/following`;
+const datocmsURL = "https://graphql.datocms.com";
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -17,23 +19,34 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function getGitFollowers(followersURL, setFollowers) {
-  fetch(followersURL)
-    .then((resposta) => {
-      return resposta.json();
-    })
+function getGitInfo(url, setFunction) {
+  fetch(url)
+    .then((resposta) => resposta.json())
     .then((json) => {
-      setFollowers(
-        json.map((follower) => {
+      setFunction(
+        json.map((item) => {
           return {
-            id: follower.id,
-            title: follower.login,
-            image: follower.avatar_url,
-            href: follower.html_url,
+            id: item.id,
+            title: item.login,
+            image: item.avatar_url,
+            href: item.html_url,
           };
         })
       );
     });
+}
+
+function getCommunities(setFunction) {
+  fetch("/api/communities", {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then(async (resposta) => {
+      const dados = await resposta.json();
+      setFunction(dados.record);
+    })
 }
 
 function ProfileSideBar(propriedades) {
@@ -62,13 +75,16 @@ function ProfileSideBar(propriedades) {
 }
 
 export default function Home() {
-  const [comunidades, setComunidades] = useState([]);
-  const [pessoasFavoritas, setFollowers] = useState([]);
-  
+  const [communities, setCommunities] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+
   useEffect(() => {
-    getGitFollowers(followersURL, setFollowers);
+    getGitInfo(followersURL, setFollowers);
+    getGitInfo(followingURL, setFollowing);
+    getCommunities(setCommunities);
   }, []);
-  
+
   return (
     <>
       <AlurakutMenu githubUser={githubUser} />
@@ -98,11 +114,22 @@ export default function Home() {
 
                 const formData = new FormData(e.target);
 
-                const comunidade = {
+                const community = {
                   title: formData.get("title"),
                   image: formData.get("image"),
                 };
-                setComunidades([comunidade, ...comunidades]);
+
+                fetch("/api/communities", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(community),
+                }).then(async (response) => {
+                  const dados = await response.json();
+                  const community = dados.record;
+                  setCommunities([community, ...communities]);
+                });
               }}
             >
               <div>
@@ -132,19 +159,19 @@ export default function Home() {
           <ProfileRelations
             title="Followers"
             seeAllLink={followersURL}
-            itens={pessoasFavoritas}
+            itens={followers}
           />
 
           <ProfileRelations
             title="Comunidades"
             seeAllLink={`#`}
-            itens={comunidades}
+            itens={communities}
           />
 
           <ProfileRelations
-            title="Pessoas da Comunidade"
-            seeAllLink={`#`}
-            itens={[]}
+            title="Você está seguindo"
+            seeAllLink={followingURL}
+            itens={following}
           />
         </div>
       </MainGrid>

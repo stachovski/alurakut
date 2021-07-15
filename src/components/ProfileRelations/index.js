@@ -13,7 +13,7 @@ export default function ProfileRelations({ title, itens, seeAllLink}) {
           {itens.slice(0, 6).map((item) => { // pega as 6 primeiras
             return (
               <li key={`${item.id}`} >
-                <a href={`${item.href}`} target="_blank">
+                <a href={`${item.id}`} target="_blank">
                   <img src={`${item.image}`} />
                   <span>{item.title}</span>
                 </a>
