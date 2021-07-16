@@ -11,7 +11,6 @@ import {
 const githubUser = "stachovski";
 const followersURL = `https://api.github.com/users/${githubUser}/followers`;
 const followingURL = `https://api.github.com/users/${githubUser}/following`;
-const datocmsURL = "https://graphql.datocms.com";
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -37,23 +36,27 @@ function getGitInfo(url, setFunction) {
 }
 
 function getCommunities(setFunction) {
-  fetch("/api/communities", {
+  const search = { type: "972033" };
+
+  fetch("/api/getCommunities", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-  })
-    .then(async (resposta) => {
-      const dados = await resposta.json();
-      setFunction(dados.record);
-    })
+    body: JSON.stringify(search),
+  }).then(async (response) => {
+    const dados = await response.json();
+    const communities = dados.record;
+    setFunction(communities);
+  });
 }
 
 function ProfileSideBar(propriedades) {
   return (
     <Box as="aside">
       <img
-      alt="profile-picture"
+        alt="profile-picture"
         src={`https://github.com/${propriedades.githubUser}.png`}
         style={{ borderRadius: "8px" }}
       />
@@ -120,10 +123,11 @@ export default function Home() {
                   image: formData.get("image"),
                 };
 
-                fetch("/api/communities", {
+                fetch("/api/createCommunity", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
+                    Accept: "application/json",
                   },
                   body: JSON.stringify(community),
                 }).then(async (response) => {

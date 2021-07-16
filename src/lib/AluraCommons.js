@@ -292,7 +292,7 @@ export function OrkutNostalgicIconSet(props) {
           <li key={`orkut__icon_set__${slug}`}>
             <span className="OrkutNostalgicIconSet__title">{name}</span>
             <span
-              className={["OrkutNostalgicIconSet__iconComplex", "OrkutNostalgicIconSet__number"]}
+              className="OrkutNostalgicIconSet__number"
               style={{ gridArea: "number" }}
             >
               {[0, 1, 2].map((_, index) => {

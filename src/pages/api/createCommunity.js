@@ -1,6 +1,6 @@
 import { SiteClient } from "datocms-client";
 
-export default async function handleCommunities(request, response) {
+export default async function createCommunity(request, response) {
   const client = new SiteClient(process.env.DATO_CMS_TOKEN);
 
   async function createRecord() {
@@ -14,25 +14,10 @@ export default async function handleCommunities(request, response) {
     });
   }
 
-  async function getRecords() {
-    const record = await client.items.all({
-        filter:{
-            type: "972033"
-        }
-    });
-
-    response.json({
-      record: record,
-    });
-  }
-
   if (request.method === "POST") {
     return createRecord();
   }
 
-  if (request.method === "GET") {
-    return getRecords();
-  }
   response.status(404).json({
     message: "Ainda não deu",
   });
