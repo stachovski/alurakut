@@ -53,6 +53,7 @@ function ProfileSideBar(propriedades) {
   return (
     <Box as="aside">
       <img
+      alt="profile-picture"
         src={`https://github.com/${propriedades.githubUser}.png`}
         style={{ borderRadius: "8px" }}
       />

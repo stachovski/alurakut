@@ -1,31 +1,38 @@
-import styled from 'styled-components';
-import Box from '../Box';
+import styled from "styled-components";
+import Box from "../Box";
 
-export default function ProfileRelations({ title, itens, seeAllLink}) {
-        
-  return (    
-      <ProfileRelationsBoxWrapper>
-        <h2 className="smallTitle">
-          {title} ({itens.length})
-        </h2>
+export default function ProfileRelations({ title, itens, seeAllLink }) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {title} ({itens.length})
+      </h2>
 
-        <ul>
-          {itens.slice(0, 6).map((item) => { // pega as 6 primeiras
-            return (
-              <li key={`${item.id}`} >
-                <a href={`${item.id}`} target="_blank">
-                  <img src={`${item.image}`} />
-                  <span>{item.title}</span>
-                </a>
-              </li>
-            )
-          })}
-        </ul>
-          
-        <br />
-        <a className="boxLink" href={`${seeAllLink}`} target="_blank">Ver Todos</a>
-      </ProfileRelationsBoxWrapper>
-  )
+      <ul>
+        {itens.slice(0, 6).map((item) => {
+          // pega as 6 primeiras
+          return (
+            <li key={`${item.id}`}>
+              <a href={`${item.id}`} target="_blank" rel="noreferrer">
+                <img alt="" src={`${item.image}`} />
+                <span>{item.title}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <br />
+      <a
+        className="boxLink"
+        href={`${seeAllLink}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Ver Todos
+      </a>
+    </ProfileRelationsBoxWrapper>
+  );
 }
 
 export const ProfileRelationsBoxWrapper = styled(Box)`
