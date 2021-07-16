@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import Box from "../components/Box";
 import MainGrid from "../components/MainGrid";
@@ -12,6 +11,7 @@ import {
 const githubUser = "stachovski";
 const followersURL = `https://api.github.com/users/${githubUser}/followers`;
 const followingURL = `https://api.github.com/users/${githubUser}/following`;
+const datocmsURL = "https://graphql.datocms.com";
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -42,17 +42,17 @@ function getCommunities(setFunction) {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-  }).then(async (resposta) => {
-    const dados = await resposta.json();
-    setFunction(dados.record);
-  });
+  })
+    .then(async (resposta) => {
+      const dados = await resposta.json();
+      setFunction(dados.record);
+    })
 }
 
 function ProfileSideBar(propriedades) {
   return (
     <Box as="aside">
-      <Image
-        alt="imagem-de-perfil"
+      <img
         src={`https://github.com/${propriedades.githubUser}.png`}
         style={{ borderRadius: "8px" }}
       />

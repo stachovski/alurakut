@@ -1,4 +1,3 @@
-import Image from "next/image";
 import NextLink from "next/link";
 import { useState } from "react";
 import styled, { css } from "styled-components";
@@ -47,11 +46,9 @@ export function AlurakutMenu({ githubUser }) {
         </nav>
 
         <button onClick={() => setMenuState(!isMenuOpen)}>
-          {isMenuOpen && (
-            <Image alt="" src={`${BASE_URL}/icons/menu-open.svg?v=${v}`} />
-          )}
+          {isMenuOpen && <img src={`${BASE_URL}/icons/menu-open.svg?v=${v}`} />}
           {!isMenuOpen && (
-            <Image alt="" src={`${BASE_URL}/icons/menu-closed.svg?v=${v}`} />
+            <img src={`${BASE_URL}/icons/menu-closed.svg?v=${v}`} />
           )}
         </button>
       </div>
@@ -179,8 +176,7 @@ function AlurakutMenuProfileSidebar({ githubUser }) {
   return (
     <div className="alurakutMenuProfileSidebar">
       <div>
-        <Image
-          alt=""
+        <img
           src={`https://github.com/${githubUser}.png`}
           style={{ borderRadius: "8px" }}
         />
@@ -205,31 +201,31 @@ export function AlurakutProfileSidebarMenuDefault() {
   return (
     <AlurakutProfileSidebarMenuDefault.Wrapper>
       <nav>
-        <a href="#">
-          <Image alt="" src={`${BASE_URL}/icons/user.svg`} />
+        <a href="/">
+          <img src={`${BASE_URL}/icons/user.svg`} />
           Perfil
         </a>
-        <a href="#">
-          <Image alt="" src={`${BASE_URL}/icons/book.svg`} />
+        <a href="/">
+          <img src={`${BASE_URL}/icons/book.svg`} />
           Recados
         </a>
-        <a href="#">
-          <Image alt="" src={`${BASE_URL}/icons/camera.svg`} />
+        <a href="/">
+          <img src={`${BASE_URL}/icons/camera.svg`} />
           Fotos
         </a>
-        <a href="#">
-          <Image alt="" src={`${BASE_URL}/icons/sun.svg`} />
+        <a href="/">
+          <img src={`${BASE_URL}/icons/sun.svg`} />
           Depoimentos
         </a>
       </nav>
       <hr />
       <nav>
-        <a href="#">
-          <Image alt="" src={`${BASE_URL}/icons/plus.svg`} />
+        <a href="/">
+          <img src={`${BASE_URL}/icons/plus.svg`} />
           GitHub Trends
         </a>
         <a href="/logout">
-          <Image alt="" src={`${BASE_URL}//icons/logout.svg`} />
+          <img src={`${BASE_URL}//icons/logout.svg`} />
           Sair
         </a>
       </nav>
@@ -277,8 +273,7 @@ export function OrkutNostalgicIconSet(props) {
             className="OrkutNostalgicIconSet__number"
             style={{ gridArea: "number" }}
           >
-            <Image
-              alt=""
+            <img
               key={`orkut__icon_set__${slug}_img`}
               className="OrkutNostalgicIconSet__iconSample"
               src={`https://alurakut.vercel.app/icons/${icon}.svg`}
@@ -297,14 +292,14 @@ export function OrkutNostalgicIconSet(props) {
           <li key={`orkut__icon_set__${slug}`}>
             <span className="OrkutNostalgicIconSet__title">{name}</span>
             <span
-              className={["OrkutNostalgicIconSet__iconComplex", "OrkutNostalgicIconSet__number"]}
+              className="OrkutNostalgicIconSet__iconComplex"
+              className="OrkutNostalgicIconSet__number"
               style={{ gridArea: "number" }}
             >
               {[0, 1, 2].map((_, index) => {
                 const isHeartActive = index <= total - 1;
                 return (
-                  <Image
-                    alt=""
+                  <img
                     key={`orkut__icon_set__${slug}_img_${index}`}
                     src={`https://alurakut.vercel.app/icons/${icon}.svg`}
                     style={{
