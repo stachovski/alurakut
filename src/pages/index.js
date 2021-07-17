@@ -78,13 +78,13 @@ function ProfileSideBar(propriedades) {
 
 export default function HomePage(props) {
   const githubUser = props.githubUser;
-  const followersURL = `https://api.github.com/users/${githubUser}/followers`;
-  const followingURL = `https://api.github.com/users/${githubUser}/following`;
   const [communities, setCommunities] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
 
   useEffect(() => {
+    const followersURL = `https://api.github.com/users/${githubUser}/followers`;
+    const followingURL = `https://api.github.com/users/${githubUser}/following`;
     getGitInfo(followersURL, setFollowers);
     getGitInfo(followingURL, setFollowing);
     getCommunities(setCommunities);
@@ -197,8 +197,6 @@ export async function getServerSideProps(context) {
       },
     }
   ).then((resposta) => resposta.json());
-
- 
 
   if (!isAuthenticated) {
     return {
