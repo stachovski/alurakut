@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+import nookies from "nookies";
 import { useEffect, useState } from "react";
 import Box from "../components/Box";
 import MainGrid from "../components/MainGrid";
@@ -7,10 +9,6 @@ import {
   AlurakutProfileSidebarMenuDefault,
   OrkutNostalgicIconSet
 } from "../lib/AluraCommons";
-
-const githubUser = "stachovski";
-const followersURL = `https://api.github.com/users/${githubUser}/followers`;
-const followingURL = `https://api.github.com/users/${githubUser}/following`;
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -78,7 +76,10 @@ function ProfileSideBar(propriedades) {
   );
 }
 
-export default function Home() {
+export default function HomePage(props) {
+  const githubUser = props.githubUser;
+  const followersURL = `https://api.github.com/users/${githubUser}/followers`;
+  const followingURL = `https://api.github.com/users/${githubUser}/following`;
   const [communities, setCommunities] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
@@ -182,4 +183,50 @@ export default function Home() {
       </MainGrid>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+
+  const { isAuthenticated } = await fetch(
+    "https://alurakut.vercel.app/api/auth",
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  ).then((resposta) => resposta.json());
+
+ 
+
+  if (!isAuthenticated) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const { githubUser } = jwt.decode(token);
+
+  const isTrueUser = await fetch(`https://github.com/${githubUser}`).then(
+    async (resposta) => (resposta.status === 404 ? false : true)
+  );
+
+  if (!isTrueUser) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      githubUser,
+    },
+  };
 }
